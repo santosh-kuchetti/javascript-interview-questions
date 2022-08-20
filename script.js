@@ -168,3 +168,111 @@ const reqArr = function (arr) {
     })
 }([1, 2])
 console.log(reqArr);
+
+
+// 7.Move zeroes to end
+// [8, 5, 0, 10, 0, 20] => [8, 5, 10, 20, 0, 0]
+    // brute force solution for this can be we can run two loops one is for  identifying number of zeroes, shifting non-zeros elements to front and second is for putting the zeroes at the end.
+
+    const arr = [8, 5, 0, 10, 0, 20];
+    const reqArray = function (array) {
+        const req = [];
+        let count = 0;
+        for (let ele of array) {  // identifying number of zeroes, shifting non-zeros elements to front
+            if (ele !== 0) {
+                req.push(ele)
+            } else {
+                count++;
+            }
+        }
+        for (let i = 0; i < count; i++) {  // putting the zeroes at the end based on the count of zeroes
+            req.push(0)
+        }
+        return req;
+    }(arr);
+    console.log(reqArray);
+
+    // optimised solution for this one will be swapping elements within the array.
+    /*
+        swapping two elements like 
+        we have a count on number of non-zero elements i.e count.
+        if the element is non-zero element we will shift the element with arr[count].
+        and count++
+    
+    */
+    const reqArray1 = function (array) {
+        let count = 0;
+        for (let i = 0; i < arr.length; i++) {
+            if (array[i] !== 0) {
+                [array[i], array[count]] = [array[count], array[i]];  
+                count++;
+            }
+        }
+        return array;
+    }(arr);
+    console.log(reqArray1)
+
+
+// 8. check whether we have any pair present in the array where it's sum is eqaul to the given sum
+
+    // brute force. 
+    const array = [2, 1, 3, 6];
+    const givenSum = 3;
+    const isPresent = function (arr, sum) {
+        for (let i = 0; i < arr.length; i++){
+            for (let j = i + 1; j < arr.length; j++){
+                if (arr[i] + arr[j] == sum) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }(array,givenSum)
+    console.log(isPresent)
+    
+    // optimised approch using set();
+    const isPresent1 = function(arr, sum) {
+        const set = new Set();
+        for (let ele of arr) {
+            if (set.has(sum - ele)) {  // if sum - ele present in the set, we return true else return false.
+                return true;
+            }
+            set.add(ele)
+        }
+        return false;
+    }(array,givenSum)
+    console.log(isPresent1)
+
+
+// 9. what is Polyfill
+/*
+    many times the functions like Array.push(), Array.pop(), Array.filter(), Array.map() and 
+    some functions that are provided by the window like window.sessionStorage(), window.localStorage() 
+    won't be supported by the browser.In that case, we can provide our own fallback functions, our own code that will  run instead of those native functions.
+    This is basicallyknown as Polyfill.
+*/
+
+// Polifill for filter
+
+const givenArray = [1, 2, 3, 4, 5];
+const required = function (arr) {
+    return arr.filter(num => {
+        return num > 4;
+    })
+}(givenArray)
+console.log(required)
+
+Array.prototype.myfilter = function (func) {
+    let arr = [];
+    console.log(this)
+    for (let i = 0; i < this.length; i++){
+        if (func(this[i], i, this)) {
+            arr.push(this[i])
+        }
+    }
+    return arr;
+}
+
+console.log(givenArray.myfilter(num => {
+    return num > 4;
+}))
